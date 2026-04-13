@@ -1,6 +1,43 @@
+# ==========================================
+# API TESTING ENVIRONMENT
+# Defines the base address for all requests
+# ==========================================
 @Woldon_HostAddress = http://localhost:5004
 
-GET {{Woldon_HostAddress}}/weatherforecast/
+###
+# AUTHENTICATION: Login
+# Tests the user authentication and session creation
+# NOTE: In a real scenario, this will return a cookie used for subsequent requests
+POST {{Woldon_HostAddress}}/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "admin123"
+}
+
+###
+# DEVICES: Get All
+# Retrieves the list of all registered machines from the database
+GET {{Woldon_HostAddress}}/api/wake/devices
 Accept: application/json
 
 ###
+# DEVICES: Status Check (Ping)
+# Tests the ICMP status monitoring for a specific IP
+# Replace '8.8.8.8' with your local machine IP for testing
+GET {{Woldon_HostAddress}}/api/wake/status/8.8.8.8
+Accept: application/json
+
+###
+# ACTIONS: Wake-on-LAN
+# Triggers the Magic Packet broadcast for the specified MAC address
+# Replace with a real MAC from your database
+POST {{Woldon_HostAddress}}/api/wake/run/AA:BB:CC:DD:EE:FF
+Accept: application/json
+
+###
+# AUTHENTICATION: Logout
+# Terminates the current administrative session
+POST {{Woldon_HostAddress}}/api/auth/logout
+Accept: application/json
